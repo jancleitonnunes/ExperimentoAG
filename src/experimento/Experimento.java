@@ -11,38 +11,58 @@ public class Experimento {
         Instancia.lerInstancia();        
         System.out.println("\nINICIALIZANDO ...");
         double t = System.currentTimeMillis();
+        float distanciaCadaExecucao[] = new float[10];//DISTANCIA DE CADA EXECUÇÃO PARA CALCULAR O MÍNIMO, MÁXIMO E MÉDIA
         AG ag = new AG();
+        int exec = 0;
         Cromossomo resultado;        
         float cruzamento, mutacao, distanciaMedia;
         for(cruzamento=51; cruzamento<=100; cruzamento++){
             for(mutacao=0.5f; mutacao<=10; mutacao=mutacao+0.5f){
+                exec++;
                 distanciaMedia = 0f;
                 for(int i=0; i<10; i++){
                     ag = new AG();
                     resultado = new Cromossomo();
                     System.out.println((i+1)+"ª execução");
-                    double tempogeracao = System.currentTimeMillis();
+                    double tempoExecucao = System.currentTimeMillis();
                     resultado = ag.executar(cruzamento, mutacao);
                     /*if (resultado.getDistancia()<(float)699.0){
                         System.out.println("ABAIXO DE 699: "+resultado);
                     }*/
                     
-                    tempogeracao = System.currentTimeMillis() - tempogeracao;
-                    tempogeracao = tempogeracao/1000;//para ficar em segundos                    
-                    System.out.println("tempo de execução: "+tempogeracao+" segundos");
+                    tempoExecucao = System.currentTimeMillis() - tempoExecucao;
+                    tempoExecucao = tempoExecucao/1000;//para ficar em segundos                    
+                    System.out.println("Tempo de execução: "+tempoExecucao+" segundos");
                     
-                    distanciaMedia = distanciaMedia + resultado.getDistancia(); 
-                    System.out.println("Distancia: "+resultado.getDistancia());
-                }               
-                distanciaMedia = distanciaMedia/10;
-                System.out.println("Cruzamento: "+cruzamento+" Mutação: "+mutacao+" Distância média: "+distanciaMedia);
+                    distanciaCadaExecucao[i] = resultado.getDistancia();                                        
+                    System.out.println("Distancia da Execução: "+resultado.getDistancia());
+                }    
+                //SOMA AS DISTANCIAS, CALCULA A MEDIA, SELECIONA A MAIOR E MENOR 
+                float maior = distanciaCadaExecucao[0];
+                float menor = distanciaCadaExecucao[0];
+                for(int i=0; i<10; i++){
+                    if(maior < distanciaCadaExecucao[i]){
+                        maior = distanciaCadaExecucao[i];
+                    }
+                    if(menor > distanciaCadaExecucao[i]){
+                        menor = distanciaCadaExecucao[i];
+                    }
+                    distanciaMedia += distanciaCadaExecucao[i];
+                }
+                
+                distanciaMedia = distanciaMedia/10; //CALCULA MÉDIA DAS DISTANCIAS
+                System.out.println("seq "+exec+" Cruzamento: "+cruzamento+" Mutação: "+mutacao+" Distância média: "+distanciaMedia+" Maior distancia: "+maior+" Menor distancia: "+menor);
+                
                 //ESCREVE RESULTADO EM ARQUIVO PARA GERAÇÃO DE GRAFICOS
-                Instancia.escreveMedia(cruzamento, mutacao, distanciaMedia);                
+                //grafico 3d com taxas de cruzamento, mutacao e distancia media
+                Instancia.escreveMedia(cruzamento, mutacao, distanciaMedia);  
+                //grafico de tolerancia para as 1.000 execucoes                
+                Instancia.escreveVarianciaMedia(exec, distanciaMedia, menor, maior);                
             }
         }
         t = System.currentTimeMillis() - t; 
         t = t/1000;//para ficar em segundos
-        System.out.println("tempo de execução: "+t+" segundos");
+        System.out.println("Tempo de execução do experimento: "+t+" segundos");
         
         
         //TESTE AVALIACAO

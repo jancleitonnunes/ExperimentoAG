@@ -74,7 +74,7 @@ public class Instancia {
     }
     
     public static void escreveMedia(float cruzamento, float mutacao, float media) throws IOException{
-        File arquivo = new File(nomeInstancia+"_grafico.txt");        
+        File arquivo = new File("graficos/"+nomeInstancia+"_grafico3d.txt");        
         if (!arquivo.exists()) {
             //cria um arquivo (vazio)
             arquivo.createNewFile();  
@@ -82,6 +82,20 @@ public class Instancia {
         FileWriter fw = new FileWriter(arquivo, true); 
         BufferedWriter bw = new BufferedWriter(fw);
         bw.write(cruzamento+" "+mutacao+" "+media);
+        bw.newLine();
+        bw.close();
+        fw.close();
+    }
+    
+    public static void escreveVarianciaMedia(int exec, float media, float min, float max) throws IOException{
+        File arquivo = new File("graficos/"+nomeInstancia+"_graficoVarianciaMedia.txt");
+        if (!arquivo.exists()) {
+            //cria um arquivo (vazio)
+            arquivo.createNewFile();
+        }
+        FileWriter fw = new FileWriter(arquivo, true);
+        BufferedWriter bw = new BufferedWriter(fw);
+        bw.write(exec+" "+media+" "+min+" "+max );
         bw.newLine();
         bw.close();
         fw.close();
