@@ -26,9 +26,10 @@ public class Experimento {
                     System.out.println((i+1)+"ª execução");
                     double tempoExecucao = System.currentTimeMillis();
                     resultado = ag.executar(cruzamento, mutacao);
-                    /*if (resultado.getDistancia()<(float)699.0){
-                        System.out.println("ABAIXO DE 699: "+resultado);
-                    }*/
+                    
+                    if (resultado.getDistancia() < Instancia.getMelhorSolucaoConhecida()){
+                        System.out.println("IGUAL OU ABAIXO DA MELHOR SOLUÇÃO CONHECIDA: "+resultado);
+                    }
                     
                     tempoExecucao = System.currentTimeMillis() - tempoExecucao;
                     tempoExecucao = tempoExecucao/1000;//para ficar em segundos                    

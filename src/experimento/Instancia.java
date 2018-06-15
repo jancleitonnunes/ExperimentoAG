@@ -15,6 +15,7 @@ public class Instancia {
     private static float[][] matrizAdjacencia;
     private static int numeroCidades; 
     private static String nomeInstancia;
+    private static float melhorSolucaoConhecida;
     
     public static void lerInstancia() throws FileNotFoundException{
         File arquivo  = null;
@@ -40,7 +41,9 @@ public class Instancia {
                 
                 if(linhaVetor[0].trim().compareTo("NAME")==0){
                     nomeInstancia = linhaVetor[1].trim();
+                    atualizaMelhorSolucaoConhecida(nomeInstancia);
                     System.out.println("Instancia = " + nomeInstancia);
+                    System.out.println("Melhor solução = " + melhorSolucaoConhecida);
                 }
                 
                 if(linhaVetor[0].trim().compareTo("DIMENSION")==0){
@@ -71,6 +74,26 @@ public class Instancia {
                 }                                    
             }             
          input.close();        
+    }
+    
+    public static void atualizaMelhorSolucaoConhecida(String nomeInstancia){
+        switch(nomeInstancia){
+            case "burma14":
+                melhorSolucaoConhecida = (float) 3323;
+                break;
+            case "bays29":
+                melhorSolucaoConhecida = (float) 2020;
+                break;
+            case "dantzig42":
+                melhorSolucaoConhecida = (float) 699;
+                break;
+            case "eil51":
+                melhorSolucaoConhecida = (float) 426;
+                break;
+            default:
+                melhorSolucaoConhecida = (float) 0;
+                System.out.println("Não foi possível atualizar a melhor solução conhecida!");
+        }
     }
     
     public static void escreveMedia(float cruzamento, float mutacao, float media) throws IOException{
@@ -183,5 +206,20 @@ public class Instancia {
     public static void setNumeroCidades(int numeroCidades) {
         Instancia.numeroCidades = numeroCidades;
     }
-    
+
+    public static String getNomeInstancia() {
+        return nomeInstancia;
+    }
+
+    public static void setNomeInstancia(String nomeInstancia) {
+        Instancia.nomeInstancia = nomeInstancia;
+    }
+
+    public static float getMelhorSolucaoConhecida() {
+        return melhorSolucaoConhecida;
+    }
+
+    public static void setMelhorSolucaoConhecida(float melhorSolucaoConhecida) {
+        Instancia.melhorSolucaoConhecida = melhorSolucaoConhecida;
+    }        
 }
