@@ -5,6 +5,8 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.Scanner;
 import javax.swing.JFileChooser;
 
@@ -38,20 +40,21 @@ public class Instancia {
          while (true) {
                 linha = input.nextLine();
                 linhaVetor = linha.split(":");
+                String linha0 = linhaVetor[0].trim();
                 
-                if(linhaVetor[0].trim().compareTo("NAME")==0){
+                if(linha0.equalsIgnoreCase("NAME")){
                     nomeInstancia = linhaVetor[1].trim();
                     atualizaMelhorSolucaoConhecida(nomeInstancia);
                     System.out.println("Instancia = " + nomeInstancia);
                     System.out.println("Melhor solução = " + melhorSolucaoConhecida);
-                }
+                }                                
                 
-                if(linhaVetor[0].trim().compareTo("DIMENSION")==0){
+                else if(linha0.equalsIgnoreCase("DIMENSION")){
                     numeroCidades = Integer.parseInt(linhaVetor[1].trim());                    
                     System.out.println("Número de cidades = " + numeroCidades);
                 }
                 
-                else if(linhaVetor[0].trim().compareTo("EDGE_WEIGHT_TYPE")==0){
+                else if(linha0.equalsIgnoreCase("EDGE_WEIGHT_TYPE") && (nomeInstancia.equalsIgnoreCase("eil51") || nomeInstancia.equalsIgnoreCase("burma14"))){                                        
                     switch(linhaVetor[1].trim()){
                         case "EUC_2D":
                             ler_EUC_2D(input);
@@ -59,11 +62,13 @@ public class Instancia {
                         case "GEO":
                             ler_GEO(input);
                             break;
-                    }                       
-                } 
-                else if (linhaVetor[0].trim().compareTo("EDGE_WEIGHT_FORMAT")==0){                    
+                    }    
+                    break;
+                }     
+                
+                else if(linha0.equalsIgnoreCase("EDGE_WEIGHT_FORMAT")){                                          
                     switch(linhaVetor[1].trim()){
-                        case "FULL_MATRIX":                              
+                        case "FULL_MATRIX":                                                          
                             ler_FULL_MATRIZ(input);
                             break;
                         case "LOWER_DIAG_ROW":
@@ -98,9 +103,8 @@ public class Instancia {
     
     public static void escreveMedia(float cruzamento, float mutacao, float media) throws IOException{
         File arquivo = new File("graficos/"+nomeInstancia+"_grafico3d.txt");        
-        if (!arquivo.exists()) {
-            //cria um arquivo (vazio)
-            arquivo.createNewFile();  
+        if (!arquivo.exists()) {            
+            arquivo.createNewFile();//cria um arquivo (vazio)  
         }
         FileWriter fw = new FileWriter(arquivo, true); 
         BufferedWriter bw = new BufferedWriter(fw);
@@ -112,9 +116,8 @@ public class Instancia {
     
     public static void escreveVarianciaMedia(int exec, float media, float min, float max) throws IOException{
         File arquivo = new File("graficos/"+nomeInstancia+"_graficoVarianciaMedia.txt");
-        if (!arquivo.exists()) {
-            //cria um arquivo (vazio)
-            arquivo.createNewFile();
+        if (!arquivo.exists()) {            
+            arquivo.createNewFile();//cria um arquivo (vazio)
         }
         FileWriter fw = new FileWriter(arquivo, true);
         BufferedWriter bw = new BufferedWriter(fw);
@@ -124,18 +127,33 @@ public class Instancia {
         fw.close();
     }
     
-    public static void edge_weight_section(Scanner input){
+    public static void escreveMelhorSolucaoConhecida(Cromossomo solucao, float cruzamento, float mutacao) throws IOException{
+        File arquivo = new File("graficos/"+nomeInstancia+"_melhorSolucaoConhecida.txt");        
+        if (!arquivo.exists()) {            
+            arquivo.createNewFile();//cria um arquivo (vazio)  
+        }
+        FileWriter fw = new FileWriter(arquivo, true); 
+        BufferedWriter bw = new BufferedWriter(fw);
+        bw.write("Cruzamento: "+cruzamento+" Mutação: "+mutacao);
+        bw.write("Melhor Solução: "+solucao);
+        bw.newLine();
+        bw.close();
+        fw.close();
+    }        
+    
+    public static void posicionaParaLeitura(Scanner input, String secaoDados){
         while(true){
             String linha = input.nextLine();
-            String[] linhaVetor = linha.split(":");            
-            if (linhaVetor[0].trim().compareTo("EDGE_WEIGHT_SECTION")==0){
+            String[] linhaVetor = linha.split(":");                        
+            if (linhaVetor[0].trim().compareTo(secaoDados) == 0){                
                 break;
             }
         }
     }
     
-    public static void ler_FULL_MATRIZ(Scanner input){        
-        edge_weight_section(input);//POSICIONA PARA LEITURA DOS DADOS        
+    public static void ler_FULL_MATRIZ(Scanner input){          
+        String secao = "EDGE_WEIGHT_SECTION";
+        posicionaParaLeitura(input, secao);//POSICIONA PARA LEITURA DOS DADOS        
         matrizAdjacencia = new float[numeroCidades][numeroCidades];
         for(int i = 0; i < numeroCidades; i++) {
             for (int j = 0; j < numeroCidades; j++) {
@@ -146,7 +164,7 @@ public class Instancia {
     }        
     
     public static void ler_LOWER_DIAG_ROW(Scanner input){
-        edge_weight_section(input);//POSICIONA PARA LEITURA DOS DADOS
+        posicionaParaLeitura(input, "EDGE_WEIGHT_SECTION");//POSICIONA PARA LEITURA DOS DADOS        
         matrizAdjacencia = new float[numeroCidades][numeroCidades];
         for(int i = 0; i < numeroCidades; i++) {
             for (int j = 0; j < numeroCidades; j++) {
@@ -159,12 +177,38 @@ public class Instancia {
     }
  
     public static void ler_EUC_2D(Scanner input){
-        edge_weight_section(input);//POSICIONA PARA LEITURA DOS DADOS
+        posicionaParaLeitura(input, "NODE_COORD_SECTION");//POSICIONA PARA LEITURA DOS DADOS        
         matrizAdjacencia = new float[numeroCidades][numeroCidades];
+        ArrayList<Ponto> cidades = new ArrayList<>();
+        Ponto p;
+        for(int i=0;i<numeroCidades;i++){
+            p = new Ponto();
+            p.setCidade(input.nextInt());
+            p.setX(input.nextInt());
+            p.setY(input.nextInt());
+            cidades.add(p);
+        }
+        
+        /*System.out.println("CIDADES E SUAS COORDENADAS: ");
+        for(Ponto ponto:cidades){
+            System.out.println(ponto);
+        }*/        
+                        
+        for(int i = 0; i < numeroCidades; i++) {
+            for (int j = 0; j < numeroCidades; j++) {
+                if(i!=j){
+                    float xd = cidades.get(i).getX() - cidades.get(j).getX();
+                    float yd = cidades.get(i).getY() - cidades.get(j).getY();
+                    float dist = (float) Math.sqrt(xd*xd + yd*yd);
+                    matrizAdjacencia[i][j] = dist;//RESTRINGIR PARA 2 CASAS DECIMAIS
+                }                
+            }
+        }
+        imprimeMatriz();
     }
     
     public static void ler_GEO(Scanner input){
-        edge_weight_section(input);//POSICIONA PARA LEITURA DOS DADOS
+        posicionaParaLeitura(input, "NODE_COORD_SECTION");//POSICIONA PARA LEITURA DOS DADOS
         matrizAdjacencia = new float[numeroCidades][numeroCidades];
     }
     

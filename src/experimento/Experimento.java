@@ -29,6 +29,7 @@ public class Experimento {
                     
                     if (resultado.getDistancia() < Instancia.getMelhorSolucaoConhecida()){
                         System.out.println("IGUAL OU ABAIXO DA MELHOR SOLUÇÃO CONHECIDA: "+resultado);
+                        Instancia.escreveMelhorSolucaoConhecida(resultado, cruzamento, mutacao);
                     }
                     
                     tempoExecucao = System.currentTimeMillis() - tempoExecucao;
