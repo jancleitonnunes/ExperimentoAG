@@ -7,6 +7,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Locale;
 import java.util.Scanner;
 import javax.swing.JFileChooser;
 
@@ -102,32 +103,34 @@ public class Instancia {
     }
     
     public static void escreveMedia(float cruzamento, float mutacao, float media) throws IOException{
+        DecimalFormat df = new DecimalFormat("0.0");        
         File arquivo = new File("graficos/"+nomeInstancia+"_grafico3d.txt");        
         if (!arquivo.exists()) {            
             arquivo.createNewFile();//cria um arquivo (vazio)  
         }
         FileWriter fw = new FileWriter(arquivo, true); 
         BufferedWriter bw = new BufferedWriter(fw);
-        bw.write(cruzamento+" "+mutacao+" "+media);
+        bw.write(cruzamento+" "+mutacao+" "+df.format(media));
         bw.newLine();
         bw.close();
         fw.close();
     }
     
     public static void escreveVarianciaMedia(int exec, float media, float min, float max) throws IOException{
+        DecimalFormat df = new DecimalFormat("0.0");        
         File arquivo = new File("graficos/"+nomeInstancia+"_graficoVarianciaMedia.txt");
         if (!arquivo.exists()) {            
             arquivo.createNewFile();//cria um arquivo (vazio)
         }
         FileWriter fw = new FileWriter(arquivo, true);
         BufferedWriter bw = new BufferedWriter(fw);
-        bw.write(exec+" "+media+" "+min+" "+max );
+        bw.write(exec+" "+df.format(media)+" "+df.format(min)+" "+df.format(max));
         bw.newLine();
         bw.close();
         fw.close();
     }
     
-    public static void escreveMelhorSolucaoConhecida(Cromossomo solucao, float cruzamento, float mutacao) throws IOException{
+    public static void escreveMelhorSolucaoConhecida(Cromossomo solucao, float cruzamento, float mutacao) throws IOException{                
         File arquivo = new File("graficos/"+nomeInstancia+"_melhorSolucaoConhecida.txt");        
         if (!arquivo.exists()) {            
             arquivo.createNewFile();//cria um arquivo (vazio)  
@@ -199,7 +202,7 @@ public class Instancia {
                 if(i!=j){
                     float xd = cidades.get(i).getX() - cidades.get(j).getX();
                     float yd = cidades.get(i).getY() - cidades.get(j).getY();
-                    float dist = (float) Math.sqrt(xd*xd + yd*yd);
+                    int dist = (int) Math.sqrt(xd*xd + yd*yd);
                     matrizAdjacencia[i][j] = dist;//RESTRINGIR PARA 2 CASAS DECIMAIS
                 }                
             }
@@ -208,16 +211,59 @@ public class Instancia {
     }
     
     public static void ler_GEO(Scanner input){
+        input.useLocale(Locale.US);
         posicionaParaLeitura(input, "NODE_COORD_SECTION");//POSICIONA PARA LEITURA DOS DADOS
         matrizAdjacencia = new float[numeroCidades][numeroCidades];
+        ArrayList<Ponto> cidades = new ArrayList<>();
+        Ponto p;
+        for(int i=0;i<numeroCidades;i++){
+            p = new Ponto();
+            p.setCidade(input.nextInt());
+            p.setX(input.nextFloat());
+            p.setY(input.nextFloat());
+            cidades.add(p);
+        }
+        
+        for(int i = 0; i < numeroCidades; i++) {
+            for (int j = 0; j < numeroCidades; j++) {
+                if(i!=j){
+                    //CALCULO DA LATITUDE E LONGITUDE PARA CIDADE DE INDICE i
+                    int deg = (int) cidades.get(i).getX();
+                    float min = cidades.get(i).getX() - deg;
+                    float latitude_i = (float) ((float) Math.PI * (deg + 5.0 * min / 3.0) / 180.0);                    
+                    deg = (int) cidades.get(i).getY();
+                    min = cidades.get(i).getY() - deg;
+                    float longitude_i = (float) ((float) Math.PI * (deg + 5.0 * min / 3.0) / 180.0);
+                    //CALCULO DA LATITUDE E LONGITUDE PARA CIDADE DE INDICE j
+                    deg = (int) cidades.get(j).getX();
+                    min = cidades.get(j).getX() - deg;
+                    float latitude_j = (float) ((float) Math.PI * (deg + 5.0 * min / 3.0) / 180.0);                    
+                    deg = (int) cidades.get(j).getY();
+                    min = cidades.get(j).getY() - deg;
+                    float longitude_j = (float) ((float) Math.PI * (deg + 5.0 * min / 3.0) / 180.0);
+                    
+                    float RRR = (float) 6378.388;                    
+                    float q1 = (float) Math.cos(longitude_i - longitude_j);
+                    float q2 = (float) Math.cos(latitude_i - latitude_j);
+                    float q3 = (float) Math.cos(latitude_i + latitude_j);
+                    
+                    //CALCULA DISTANCIA ENTRE CIDADE DE INDICE i E CIDADE DE INDICE j
+                    int dist = (int) (RRR * Math.acos(0.5*((1.0+q1)*q2 - (1.0-q1)*q3)) + 1.0);
+                    
+                    matrizAdjacencia[i][j] = dist;//RESTRINGIR PARA 2 CASAS DECIMAIS
+                }                
+            }
+        }
+        imprimeMatriz();
     }
     
     public static void imprimeMatriz(){
         System.out.println("Matriz de adjacência:");
+        DecimalFormat df = new DecimalFormat("0.0");
         for(int i = 0; i < numeroCidades; i++) {
             System.out.print("\n");
             for (int j = 0; j < numeroCidades; j++) {                    
-                System.out.print(matrizAdjacencia[i][j] + " ");
+                System.out.print(df.format(matrizAdjacencia[i][j]) + " ");
             }
         }        
     }

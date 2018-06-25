@@ -2,7 +2,7 @@ package experimento;
 
 /** @author Jancleiton Nunes */
 
-//CLASSE PARA REPRESENTAR OS PONTOS PARA A INSTANCIA TIPO EUC_2D
+//CLASSE PARA REPRESENTAR OS PONTOS PARA A INSTANCIA TIPO EUC_2D E GEO
 public class Ponto {
     private int cidade;
     private float x;

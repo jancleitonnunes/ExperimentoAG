@@ -28,8 +28,10 @@ public class AG {
         atualizaMelhorSolucao();                          
         
         double tempoExecucao = 0.0;
-        int numeroGeracoes = 0;        
-        while(tempoExecucao<10000){
+        int numeroGeracoes = 0;
+        int tempoDeParada = escolhaTempoDeParada(Instancia.getNomeInstancia());  
+        
+        while(tempoExecucao<tempoDeParada){ //TEMPO DE EXECUÇÃO EM MILISEGUNDOS
             double tempoInicio = System.currentTimeMillis();
             ArrayList<Cromossomo> novaGeracao = null;
             novaGeracao = new ArrayList<Cromossomo>();
@@ -53,8 +55,28 @@ public class AG {
             tempoExecucao = tempoExecucao + tempoParcial;
             numeroGeracoes++;            
         }                        
-        System.out.println("Nº DE GERAÇÕES: "+numeroGeracoes);
+        //System.out.println("Nº DE GERAÇÕES: "+numeroGeracoes);
         return this.melhorSolucao;
+    }
+    
+    public int escolhaTempoDeParada(String instancia){
+        int tempo = 0;
+        switch(instancia){
+            case "burma14":
+                tempo = 50000;
+                break;
+            case "bays29":
+                tempo = 150000;
+                break;
+            case "dantzig42":
+                tempo = 200000;
+                break;
+            case "eil51":
+                tempo = 350000;
+                break;
+                
+        }
+        return tempo;
     }
     
     public int piorSolucao(ArrayList<Cromossomo> geracao){
