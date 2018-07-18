@@ -21,6 +21,7 @@ public class Instancia {
     private static float melhorSolucaoConhecida;
     
     public static void lerInstancia() throws FileNotFoundException{
+        criaDiretorio();
         File arquivo  = null;
         JFileChooser fc = new JFileChooser();
         fc.setDialogTitle("Escolha a instancia");
@@ -47,12 +48,12 @@ public class Instancia {
                     nomeInstancia = linhaVetor[1].trim();
                     atualizaMelhorSolucaoConhecida(nomeInstancia);
                     System.out.println("Instancia = " + nomeInstancia);
-                    System.out.println("Melhor solução = " + melhorSolucaoConhecida);
+                    System.out.println("Melhor solucao = " + melhorSolucaoConhecida);
                 }                                
                 
                 else if(linha0.equalsIgnoreCase("DIMENSION")){
                     numeroCidades = Integer.parseInt(linhaVetor[1].trim());                    
-                    System.out.println("Número de cidades = " + numeroCidades);
+                    System.out.println("Numero de cidades = " + numeroCidades);
                 }
                 
                 else if(linha0.equalsIgnoreCase("EDGE_WEIGHT_TYPE") && (nomeInstancia.equalsIgnoreCase("eil51") || nomeInstancia.equalsIgnoreCase("burma14"))){                                        
@@ -98,7 +99,7 @@ public class Instancia {
                 break;
             default:
                 melhorSolucaoConhecida = (float) 0;
-                System.out.println("Não foi possível atualizar a melhor solução conhecida!");
+                System.out.println("Nao foi possivel atualizar a melhor solucao conhecida!");
         }
     }
     
@@ -131,14 +132,14 @@ public class Instancia {
     }
     
     public static void escreveMelhorSolucaoConhecida(Cromossomo solucao, float cruzamento, float mutacao) throws IOException{                
-        File arquivo = new File("graficos/"+nomeInstancia+"_melhorSolucaoConhecida.txt");        
-        if (!arquivo.exists()) {            
+        File arquivo = new File("graficos/"+nomeInstancia+"_melhorSolucaoConhecida.txt");         
+        if (!arquivo.exists()) {              
             arquivo.createNewFile();//cria um arquivo (vazio)  
         }
         FileWriter fw = new FileWriter(arquivo, true); 
         BufferedWriter bw = new BufferedWriter(fw);
-        bw.write("Cruzamento: "+cruzamento+" Mutação: "+mutacao);
-        bw.write("Melhor Solução: "+solucao);
+        bw.write("Cruzamento: "+cruzamento+" Mutacao: "+mutacao);
+        bw.write("Melhor Solucao: "+solucao);
         bw.newLine();
         bw.close();
         fw.close();
@@ -258,7 +259,7 @@ public class Instancia {
     }
     
     public static void imprimeMatriz(){
-        System.out.println("Matriz de adjacência:");
+        System.out.println("Matriz de adjacencia:");
         DecimalFormat df = new DecimalFormat("0.0");
         for(int i = 0; i < numeroCidades; i++) {
             System.out.print("\n");
@@ -312,4 +313,11 @@ public class Instancia {
     public static void setMelhorSolucaoConhecida(float melhorSolucaoConhecida) {
         Instancia.melhorSolucaoConhecida = melhorSolucaoConhecida;
     }        
+
+    private static void criaDiretorio() {
+        File diretorio = new File("graficos/");
+        if (!diretorio.exists()) {
+           diretorio.mkdir(); //mkdir() cria somente um diretório, mkdirs() cria diretórios e subdiretórios.
+        } 
+    }
 }
