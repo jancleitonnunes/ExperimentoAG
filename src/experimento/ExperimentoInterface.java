@@ -14,17 +14,23 @@ import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 
 /**
  *
  * @author PC
  */
 public class ExperimentoInterface extends javax.swing.JFrame {
+    
+    private float txCruzamento;
+    private float txMutacao;
 
     /**
      * Creates new form ExperimentoInterface
      */
     public ExperimentoInterface() throws UnsupportedEncodingException {
+        this.txCruzamento = 51;
+        this.txMutacao = 0.5f;
         initComponents();
         URL caminhoImagem = this.getClass().getClassLoader().getResource("img/engrenagem.png");
         Image iconeTitulo = Toolkit.getDefaultToolkit().getImage(caminhoImagem);
@@ -47,10 +53,16 @@ public class ExperimentoInterface extends javax.swing.JFrame {
         labelTxMutacao = new javax.swing.JLabel();
         taxaCruzamento = new javax.swing.JLabel();
         taxaMutacao = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
+        jButton_iniciar = new javax.swing.JButton();
         jProgressBar = new javax.swing.JProgressBar();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTextArea1 = new javax.swing.JTextArea();
+        jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+        txCruzamentoConfigurada = new javax.swing.JTextField();
+        txMutacaoConfigurada = new javax.swing.JTextField();
+        jButtonConfigurarValores = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Experimento AG");
@@ -67,10 +79,10 @@ public class ExperimentoInterface extends javax.swing.JFrame {
         taxaMutacao.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         taxaMutacao.setText("0");
 
-        jButton1.setText("Iniciar");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        jButton_iniciar.setText("Iniciar");
+        jButton_iniciar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                jButton_iniciarActionPerformed(evt);
             }
         });
 
@@ -85,6 +97,28 @@ public class ExperimentoInterface extends javax.swing.JFrame {
         jTextArea1.setRows(5);
         jScrollPane1.setViewportView(jTextArea1);
 
+        jLabel1.setText("Setar taxas:");
+        jLabel1.setToolTipText("<html>\n<p>\nATENÇÃO! usar apenas quando for preciso iniciar o experimento com valores diferentes dos valores <i>default</i>. Os valores <i>default</i> são: cruzamento 51% e mutação 0,5%. \n</p>\n</html>");
+
+        jLabel2.setText("Cruzamento:");
+        jLabel2.setToolTipText("<html>\n<p>\nATENÇÃO! usar apenas quando for preciso iniciar o experimento com valores diferentes dos valores <i>default</i>. Os valores <i>default</i> são: cruzamento 51% e mutação 0,5%. \n</p>\n</html>");
+
+        jLabel3.setText("Mutação:");
+        jLabel3.setToolTipText("<html>\n<p>\nATENÇÃO! usar apenas quando for preciso iniciar o experimento com valores diferentes dos valores <i>default</i>. Os valores <i>default</i> são: cruzamento 51% e mutação 0,5%. \n</p>\n</html>");
+
+        txCruzamentoConfigurada.setToolTipText("");
+        txCruzamentoConfigurada.setMinimumSize(new java.awt.Dimension(20, 20));
+        txCruzamentoConfigurada.setPreferredSize(new java.awt.Dimension(30, 25));
+
+        txMutacaoConfigurada.setPreferredSize(new java.awt.Dimension(30, 25));
+
+        jButtonConfigurarValores.setText("Configurar valores");
+        jButtonConfigurarValores.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonConfigurarValoresActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -94,9 +128,9 @@ public class ExperimentoInterface extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jScrollPane1)
                     .addComponent(jProgressBar, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
+                    .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jButton_iniciar, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addComponent(labelTxCruzamento)
                                 .addGap(18, 18, 18)
@@ -105,7 +139,21 @@ public class ExperimentoInterface extends javax.swing.JFrame {
                                 .addComponent(labelTxMutacao)
                                 .addGap(18, 18, 18)
                                 .addComponent(taxaMutacao, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(0, 362, Short.MAX_VALUE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 177, Short.MAX_VALUE)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(jLabel2)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(txCruzamentoConfigurada, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jLabel3)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(txMutacaoConfigurada, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(4, 4, 4))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(jLabel1)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jButtonConfigurarValores)))))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -116,15 +164,25 @@ public class ExperimentoInterface extends javax.swing.JFrame {
                     .addComponent(labelTxCruzamento)
                     .addComponent(taxaCruzamento)
                     .addComponent(labelTxMutacao)
-                    .addComponent(taxaMutacao))
+                    .addComponent(taxaMutacao)
+                    .addComponent(jLabel1)
+                    .addComponent(jButtonConfigurarValores))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jButton1)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jButton_iniciar)
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabel2)
+                        .addComponent(jLabel3)
+                        .addComponent(txCruzamentoConfigurada, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(txMutacaoConfigurada, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jProgressBar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 380, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 372, Short.MAX_VALUE)
                 .addContainerGap())
         );
+
+        jLabel1.getAccessibleContext().setAccessibleDescription("");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -147,17 +205,28 @@ public class ExperimentoInterface extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void jButton_iniciarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_iniciarActionPerformed
         try {
             jTextArea1.setText("");
+            jButtonConfigurarValores.setEnabled(false);
+            txCruzamentoConfigurada.setEnabled(false);
+            txMutacaoConfigurada.setEnabled(false);
             iniciar();
         } catch (IOException ex) {
             Logger.getLogger(ExperimentoInterface.class.getName()).log(Level.SEVERE, null, ex);
         }
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_jButton_iniciarActionPerformed
+
+    private void jButtonConfigurarValoresActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonConfigurarValoresActionPerformed
+        this.txCruzamento =  Float.parseFloat(txCruzamentoConfigurada.getText());
+        this.txMutacao = Float.parseFloat(txMutacaoConfigurada.getText());
+        JOptionPane.showMessageDialog (null, "Valores configurados!", "Atenção!", JOptionPane.PLAIN_MESSAGE);
+        txCruzamentoConfigurada.setText("");
+        txMutacaoConfigurada.setText("");
+    }//GEN-LAST:event_jButtonConfigurarValoresActionPerformed
 
     public void iniciar()throws FileNotFoundException, IOException{
-        jButton1.setEnabled(false);
+        jButton_iniciar.setEnabled(false);
         /*jProgressBar.setStringPainted(true);
         jProgressBar.setString("0%");*/
         new Thread(new Runnable(){
@@ -172,14 +241,14 @@ public class ExperimentoInterface extends javax.swing.JFrame {
                 double t = System.currentTimeMillis();
                 float distanciaCadaExecucao[] = new float[10];//DISTANCIA DE CADA EXECUÇÃO PARA CALCULAR O MÍNIMO, MÁXIMO E MÉDIA
                 AG ag = new AG();
-                int exec = 0;
+                int exec = (int) (((txCruzamento-51)*20)+(txMutacao*2))-1;
                 Cromossomo resultado;        
                 float cruzamento, mutacao, distanciaMedia;
                 int progresso = 0;
-                for(cruzamento=51; cruzamento<=100; cruzamento++){
+                for(cruzamento = txCruzamento; cruzamento <= 100; cruzamento++){
                     taxaCruzamento.setText((int)cruzamento+"%");
 
-                    for(mutacao=0.5f; mutacao<=10; mutacao=mutacao+0.5f){
+                    for(mutacao = txMutacao; mutacao <= 10; mutacao = mutacao + 0.5f){
                         //ATUALIZA PROGRESSBAR
                         progresso++;
                         jProgressBar.setValue(progresso);
@@ -247,7 +316,7 @@ public class ExperimentoInterface extends javax.swing.JFrame {
                 t = System.currentTimeMillis() - t; 
                 t = t/1000;//para ficar em segundos
                 System.out.println("Tempo de execucao do experimento: "+t+" segundos");
-                jButton1.setEnabled(true);
+                jButton_iniciar.setEnabled(true);
             }
         }).start();
                 
@@ -293,7 +362,11 @@ public class ExperimentoInterface extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButtonConfigurarValores;
+    private javax.swing.JButton jButton_iniciar;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JProgressBar jProgressBar;
     private javax.swing.JScrollPane jScrollPane1;
@@ -302,5 +375,7 @@ public class ExperimentoInterface extends javax.swing.JFrame {
     private javax.swing.JLabel labelTxMutacao;
     private javax.swing.JLabel taxaCruzamento;
     private javax.swing.JLabel taxaMutacao;
+    private javax.swing.JTextField txCruzamentoConfigurada;
+    private javax.swing.JTextField txMutacaoConfigurada;
     // End of variables declaration//GEN-END:variables
 }
