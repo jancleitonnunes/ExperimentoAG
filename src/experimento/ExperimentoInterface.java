@@ -18,8 +18,9 @@ import javax.swing.JOptionPane;
 
 /**
  *
- * @author PC
+ * @author Jancleiton Nunes
  */
+
 public class ExperimentoInterface extends javax.swing.JFrame {
     
     private float txCruzamento;
@@ -238,8 +239,8 @@ public class ExperimentoInterface extends javax.swing.JFrame {
                     Logger.getLogger(ExperimentoInterface.class.getName()).log(Level.SEVERE, null, ex);
                 }
                 System.out.println("\n\nINICIALIZANDO...");
-                double t = System.currentTimeMillis();
-                float distanciaCadaExecucao[] = new float[10];//DISTANCIA DE CADA EXECUÇÃO PARA CALCULAR O MÍNIMO, MÁXIMO E MÉDIA
+                double t = System.currentTimeMillis();              
+                
                 AG ag = new AG();
                 int exec = (int) (((txCruzamento-51)*20)+(txMutacao*2))-1;
                 Cromossomo resultado;        
@@ -249,6 +250,7 @@ public class ExperimentoInterface extends javax.swing.JFrame {
                     taxaCruzamento.setText((int)cruzamento+"%");
 
                     for(mutacao = txMutacao; mutacao <= 10; mutacao = mutacao + 0.5f){
+                        txMutacao = 0.5f;
                         //ATUALIZA PROGRESSBAR
                         progresso++;
                         jProgressBar.setValue(progresso);
@@ -257,9 +259,17 @@ public class ExperimentoInterface extends javax.swing.JFrame {
                         
                         taxaMutacao.setText(mutacao+"%");                                              
                         exec++;
-                        distanciaMedia = 0f;                               
-
-                        for(int i=0; i<10; i++){
+                        distanciaMedia = 0f;                            
+                        
+                        int quantExecucoes = 10; //para eil51 são 5 para as demais 10
+                        
+                        if(Instancia.getNomeInstancia().equalsIgnoreCase("eil51")){
+                            quantExecucoes = 5;
+                        }
+                        
+                        float distanciaCadaExecucao[] = new float[quantExecucoes];//DISTANCIA DE CADA EXECUÇÃO PARA CALCULAR O MÍNIMO, MÁXIMO E MÉDIA
+                        
+                        for(int i=0; i<quantExecucoes; i++){
                             ag = new AG();
                             resultado = new Cromossomo();
                             System.out.println((i+1)+"a execucao");
@@ -286,7 +296,7 @@ public class ExperimentoInterface extends javax.swing.JFrame {
                         //SOMA AS DISTANCIAS, CALCULA A MEDIA, SELECIONA A MAIOR E MENOR 
                         float maior = distanciaCadaExecucao[0];
                         float menor = distanciaCadaExecucao[0];
-                        for(int i=0; i<10; i++){
+                        for(int i=0; i<quantExecucoes; i++){
                             if(maior < distanciaCadaExecucao[i]){
                                 maior = distanciaCadaExecucao[i];
                             }
@@ -296,7 +306,7 @@ public class ExperimentoInterface extends javax.swing.JFrame {
                             distanciaMedia += distanciaCadaExecucao[i];
                         }
 
-                        distanciaMedia = distanciaMedia/10; //CALCULA MÉDIA DAS DISTANCIAS
+                        distanciaMedia = distanciaMedia/quantExecucoes; //CALCULA MÉDIA DAS DISTANCIAS para eil51 são 5 para as demais 10
                         System.out.println("Combinacao "+exec+" Cruzamento: "+cruzamento+" Mutacao: "+mutacao+" Distancia media: "+distanciaMedia+" Maior distancia: "+maior+" Menor distancia: "+menor);                
                         try {
                             //ESCREVE RESULTADO EM ARQUIVO PARA GERAÇÃO DE GRAFICOS
