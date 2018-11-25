@@ -196,7 +196,7 @@ public class AG {
         float tamanhoGeracao = this.geracao.size();        
         float avaliacaoRanking;        
         for(int i=0; i<this.geracao.size();i++){            
-            avaliacaoRanking = min+((max-min)*((i+1-1)/(tamanhoGeracao-1)));            
+            avaliacaoRanking = min+((max-min)*((i)/(tamanhoGeracao-1)));            
             this.geracao.get(i).setAvaliacaoRanking(avaliacaoRanking);            
         }        
     }
